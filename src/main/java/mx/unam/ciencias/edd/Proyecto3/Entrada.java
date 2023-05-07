@@ -11,29 +11,6 @@ import mx.unam.ciencias.edd.Lista;
 /*Clase para leer la entrada de dos formas */
 public class Entrada {
 
-    /* Método para leer las lineas del archivo y ordenarlas */
-    public static Lista<Normalizada> leelineas(String[] rutas) {
-        Lista<Normalizada> l = new Lista<>();
-        for (int i = 0; i < rutas.length && rutas[i] != null; i++) {
-
-            try {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(
-                                new FileInputStream(rutas[i])));
-                String linea = null;
-                while ((linea = in.readLine()) != null) {
-                    Normalizada tc = new Normalizada(linea);
-                    l.agregaFinal(tc);
-                }
-            } catch (IOException ioe) {
-                System.out.printf("La Ruta del archivo no existe");
-                System.exit(0);
-            }
-            l = Lista.mergeSort(l);
-        }
-        return l;
-    }
-
     /* Lee por entrada estándar */
     public static Lista<String> estandar() {
         Lista<String> l = new Lista<>();
@@ -71,35 +48,11 @@ public class Entrada {
     private static Lista<String> formato(BufferedReader in) {
         Lista<String> lista = new Lista<>();
         String linea;
-        String limpio = "";
         try {
             while ((linea = in.readLine()) != null) {
-                linea = " " + linea;
-                if (linea.contains("#")) {
-                    linea = linea.split("#")[0];
-                    if (linea.equals(""))
-                        linea = " ";
-                }
-                limpio += linea;
-                limpio = limpio.replaceAll("\\s+\\s+", " ").trim();
-            }
-            // Arreglo con nuestros elementos limpios
-            String[] done = limpio.split(" ");
-            for (int i = 1; i < done.length; i++) {
-                try {
-                    if (!revisaNumeros(done[i])) {
-                        throw new IllegalArgumentException("Las estructuras solo pueden contener dígitos");
-                    }
-                } catch (IllegalArgumentException iaee) {
-                    System.out.println("Las estructuras solo pueden contener dígitos");
-                    System.exit(1);
-                }
-            }
-            for (String a : done) {
+                lista.agregaFinal(linea);
 
-                lista.agregaFinal(a);
             }
-
         } catch (IOException ioe) {
         }
         return lista;
