@@ -1,4 +1,4 @@
-package mx.unam.ciencias.edd.Proyecto2;
+package mx.unam.ciencias.edd.Proyecto3;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -9,7 +9,30 @@ import java.io.InputStreamReader;
 import mx.unam.ciencias.edd.Lista;
 
 /*Clase para leer la entrada de dos formas */
-public class Entradas {
+public class Entrada {
+
+    /* Método para leer las lineas del archivo y ordenarlas */
+    public static Lista<Normalizada> leelineas(String[] rutas) {
+        Lista<Normalizada> l = new Lista<>();
+        for (int i = 0; i < rutas.length && rutas[i] != null; i++) {
+
+            try {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(
+                                new FileInputStream(rutas[i])));
+                String linea = null;
+                while ((linea = in.readLine()) != null) {
+                    Normalizada tc = new Normalizada(linea);
+                    l.agregaFinal(tc);
+                }
+            } catch (IOException ioe) {
+                System.out.printf("La Ruta del archivo no existe");
+                System.exit(0);
+            }
+            l = Lista.mergeSort(l);
+        }
+        return l;
+    }
 
     /* Lee por entrada estándar */
     public static Lista<String> estandar() {
