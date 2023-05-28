@@ -17,7 +17,7 @@ public class Grafica<T> implements Coleccion<T> {
 
         /* Construye un nuevo iterador, auxiliándose de la lista de vértices. */
         public Iterador() {
-            iterador = vertices.iteradorLista();
+            iterador = vertices.iterator();
         }
 
         /* Nos dice si hay un siguiente elemento. */
@@ -45,14 +45,14 @@ public class Grafica<T> implements Coleccion<T> {
         private double distancia;
         /* El índice del vértice. */
         private int indice;
-        /* La lista de vecinos del vértice. */
-        private Lista<Vecino> vecinos;
+        /* El diccionario de vecinos del vértice. */
+        private Diccionario<T, Vecino> vecinos;
 
         /* Crea un nuevo vértice a partir de un elemento. */
         public Vertice(T elemento) {
             this.elemento = elemento;
             color = Color.NINGUNO;
-            vecinos = new Lista<>();
+            vecinos = new Diccionario<>();
         }
 
         /* Regresa el elemento del vértice. */
@@ -64,7 +64,7 @@ public class Grafica<T> implements Coleccion<T> {
         /* Regresa el grado del vértice. */
         @Override
         public int getGrado() {
-            return vecinos.getLongitud();
+            return vecinos.getElementos();
         }
 
         /* Regresa el color del vértice. */
@@ -138,7 +138,7 @@ public class Grafica<T> implements Coleccion<T> {
         /* Regresa el color del vecino. */
         @Override
         public Color getColor() {
-            return vecino.getColor();
+            return vecino.color;
         }
 
         /* Regresa un iterable para los vecinos del vecino. */
@@ -159,7 +159,7 @@ public class Grafica<T> implements Coleccion<T> {
     }
 
     /* Vértices. */
-    private Lista<Vertice> vertices;
+    private Diccionario<T, Vertice> vertices;
     /* Número de aristas. */
     private int aristas;
 
@@ -167,7 +167,7 @@ public class Grafica<T> implements Coleccion<T> {
      * Constructor único.
      */
     public Grafica() {
-        vertices = new Lista<>();
+        vertices = new Diccionario<>();
     }
 
     /**
@@ -202,7 +202,7 @@ public class Grafica<T> implements Coleccion<T> {
         if (elemento == null || contiene(elemento))
             throw new IllegalArgumentException("IAE");
         Vertice vertice = new Vertice(elemento);
-        vertices.agrega(vertice);
+        vertices.agrega(elemento, vertice);
     }
 
     /**
@@ -242,8 +242,8 @@ public class Grafica<T> implements Coleccion<T> {
 
         Vecino vecinoA = new Vecino(verticeA, peso);
         Vecino vecinoB = new Vecino(verticeB, peso);
-        verticeA.vecinos.agrega(vecinoB);
-        verticeB.vecinos.agrega(vecinoA);
+        verticeA.vecinos.agrega(b, vecinoB);
+        verticeB.vecinos.agrega(a, vecinoA);
         aristas++;
     }
 
@@ -266,25 +266,10 @@ public class Grafica<T> implements Coleccion<T> {
         if (!sonVecinos(verticeA.elemento, verticeB.elemento))
             throw new IllegalArgumentException("IAE");
 
-        for (Vecino vA : verticeA.vecinos) {
-            if (vA.vecino.elemento.equals(verticeB.elemento))
-                verticeA.vecinos.elimina(vA);
-        }
-        for (Vecino vB : verticeB.vecinos) {
-            if (vB.vecino.elemento.equals(verticeA.elemento))
-                verticeB.vecinos.elimina(vB);
-        }
+        verticeA.vecinos.elimina(b);
+        verticeB.vecinos.elimina(a);
         aristas--;
     }
-
-    /*
-     * private Vecino buscaVecino(Vertice v) {
-     * for (Vecino vecino : v.vecinos) {
-     * if (vecino.vecino.elemento.equals(v.elemento))
-     * return vecino;
-     * }
-     * }
-     */
 
     /**
      * Nos dice si el elemento está contenido en la gráfica.
@@ -319,7 +304,7 @@ public class Grafica<T> implements Coleccion<T> {
         for (Vecino vecino : vertice.vecinos) {
             desconecta(vertice.elemento, vecino.vecino.elemento);
         }
-        vertices.elimina(vertice);
+        vertices.elimina(elemento);
     }
 
     private Vertice buscaVertice(T elemento) {
@@ -465,7 +450,11 @@ public class Grafica<T> implements Coleccion<T> {
      */
     public boolean esConexa() {
         int[] contador = { 0 };
-        bfs(vertices.getPrimero().elemento, (v) -> count(contador));
+
+        for (Vertice v : vertices) {
+            bfs(v.elemento, (vi) -> count(contador));
+            break;
+        }
 
         return contador[0] == getElementos();
     }
@@ -733,9 +722,9 @@ public class Grafica<T> implements Coleccion<T> {
 
         int n = vertices.getElementos();
         if (aristas > ((n * (n - 1)) / 2) - n)
-            heap = new MonticuloArreglo<Vertice>(vertices);
+            heap = new MonticuloArreglo<Vertice>(vertices, vertices.getElementos());
         else
-            heap = new MonticuloMinimo<>(vertices);
+            heap = new MonticuloMinimo<>(vertices, vertices.getElementos());
 
         while (!heap.esVacia()) {
             Vertice vertex = heap.elimina();
