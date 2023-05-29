@@ -88,20 +88,19 @@ public class MazeReader {
             }
 
         }
-
         RoomsSvg rm = new RoomsSvg();
         String a = rm.createRooms(contentCell, columns, rows);
-        System.out.println(graph.getAristas());
-        // System.out.println(destination.getInd());
+        a += solveMaze(graph, entry, destination) + "</svg>";
         System.out.println(a);
 
         return graph;
 
     }
 
-    public Lista<VerticeGrafica<Cell>> solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
+    public String solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
         Lista<VerticeGrafica<Cell>> path = graph.dijkstra(origin, destination);
-        return path;
+        RoomsSvg rm = new RoomsSvg();
+        return rm.createPath(path);
     }
 
     private void checkBorders(byte[] content, int column, int rows) {

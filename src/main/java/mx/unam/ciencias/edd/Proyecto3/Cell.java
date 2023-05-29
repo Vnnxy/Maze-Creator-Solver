@@ -8,6 +8,8 @@ public class Cell {
     private int level;
     private int points = 0;
     private int index;
+    private int x1 = 0;
+    private int y1 = 0;
 
     public Cell(byte b, int level, int index) {
 
@@ -56,6 +58,22 @@ public class Cell {
 
     public Boolean isWest() {
         return west;
+    }
+
+    public void setX(int x) {
+        this.x1 = x;
+    }
+
+    public void setY(int y) {
+        this.y1 = y;
+    }
+
+    public int getX() {
+        return x1;
+    }
+
+    public int getY() {
+        return y1;
     }
 
 }

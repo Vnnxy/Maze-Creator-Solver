@@ -1,7 +1,10 @@
 package mx.unam.ciencias.edd.Proyecto3;
 
 import mx.unam.ciencias.edd.Grafica;
+import mx.unam.ciencias.edd.Lista;
+import mx.unam.ciencias.edd.VerticeGrafica;
 import mx.unam.ciencias.edd.Proyecto3.Cell;
+import mx.unam.ciencias.edd.Proyecto3.*;
 
 public class RoomsSvg {
 
@@ -32,13 +35,14 @@ public class RoomsSvg {
                 // System.out.println(level);
             }
             level = graph[i].getLevel();
-
+            graph[i].setX(xRight - 5);
+            graph[i].setY(yDown - 5);
             svg += createCell(graph[i], xLeft, xRight, yUp, yDown);
             xLeft += 10;
             xRight += 10;
 
         }
-        return svg += "</svg>";
+        return svg;
     }
 
     private String createCell(Cell cell, int x1, int x2, int y1, int y2) {
@@ -56,8 +60,23 @@ public class RoomsSvg {
 
     }
 
-    private String createPath(Lista<VerticeGrafica<Cell>> path) {
-
+    public String createPath(Lista<VerticeGrafica<Cell>> path) {
+        String svgPath = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='yellowgreen' stroke-width='1' />\n";
+        String svg = "";
+        Cell[] arrPath = new Cell[path.getLongitud()];
+        int i = 0;
+        for (VerticeGrafica<Cell> cell : path) {
+            arrPath[i] = cell.get();
+            i++;
+        }
+        for (int j = 0; j < arrPath.length - 1; j++) {
+            int x1 = arrPath[j].getX();
+            int x2 = arrPath[j + 1].getX();
+            int y1 = arrPath[j].getY();
+            int y2 = arrPath[j + 1].getY();
+            svg += String.format(svgPath, x1, y1, x2, y2);
+        }
+        return svg;
     }
 
 }
