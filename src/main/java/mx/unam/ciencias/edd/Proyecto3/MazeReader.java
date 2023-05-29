@@ -41,21 +41,28 @@ public class MazeReader {
                 level++;
 
             Cell cell = new Cell(content[i], level);
+
             graph.agrega(cell);
             contentCell[i] = cell;
         }
+        /*
+         * for (int i = 6; i < contentCell.length; i++) {
+         * Cell currentCell = contentCell[i];
+         * if (currentCell.isEast() == true) {
+         * graph.conecta(currentCell, contentCell[i + 1],
+         * currentCell.getPoints() + 1 + contentCell[i + 1].getPoints());
+         * }
+         * if (currentCell.isSouth() == true) {
+         * graph.conecta(currentCell, contentCell[i + columns],
+         * currentCell.getPoints() + 1 + contentCell[i + columns].getPoints());
+         * }
+         * }
+         */
 
-        for (int i = 6; i < contentCell.length; i++) {
-            Cell currentCell = contentCell[i];
-            if (currentCell.isEast() == true) {
-                graph.conecta(currentCell, contentCell[i + 1],
-                        currentCell.getPoints() + 1 + contentCell[i + 1].getPoints());
-            }
-            if (currentCell.isSouth() == true) {
-                graph.conecta(currentCell, contentCell[i + columns],
-                        currentCell.getPoints() + 1 + contentCell[i + columns].getPoints());
-            }
-        }
+        RoomsSvg rm = new RoomsSvg();
+        String a = rm.createRooms(contentCell, columns, rows);
+        System.out.println(a);
+
         return graph;
 
     }

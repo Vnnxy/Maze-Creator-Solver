@@ -1,8 +1,11 @@
 package mx.unam.ciencias.edd.Proyecto3;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.*;
+
+import mx.unam.ciencias.edd.*;
 
 public class FileReader {
 
@@ -13,10 +16,12 @@ public class FileReader {
         try {
 
             File file = new File(path);
-            byte[] fileContent = Files.readAllBytes(file.toPath());
-            System.out.println("all good");
+            FileInputStream fis = new FileInputStream(path);
+
+            // byte[] fileContent = Files.readAllBytes(file.toPath());
+            byte[] fileContent = fis.readAllBytes();
             MazeReader mze = new MazeReader();
-            mze.getCells(fileContent);
+            Grafica<Cell> m = mze.getCells(fileContent);
             return fileContent;
 
         } catch (IOException ioe) {

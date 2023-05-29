@@ -1,11 +1,11 @@
 package mx.unam.ciencias.edd.Proyecto3;
 
 public class Cell {
-    private Boolean north = true;
-    private Boolean south = true;
-    private Boolean east = true;
-    private Boolean west = true;
-    private int level = 0;
+    private Boolean north = false;
+    private Boolean south = false;
+    private Boolean east = false;
+    private Boolean west = false;
+    private int level;
     private int points = 0;
 
     public Cell(byte b, int level) {
@@ -16,16 +16,16 @@ public class Cell {
         int walls = (b) & 15; // este igual
 
         if ((walls & 1) == 1)
-            east = false;
+            east = true;
 
         if (((walls >> 1) & 1) == 1)
-            north = false;
+            north = true;
 
         if (((walls >> 2) & 1) == 1)
-            west = false;
+            west = true;
 
         if (((walls >> 3) & 1) == 1)
-            south = false;
+            south = true;
     }
 
     public int getPoints() {
