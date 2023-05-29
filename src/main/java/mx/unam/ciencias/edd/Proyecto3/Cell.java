@@ -7,29 +7,35 @@ public class Cell {
     private Boolean west = false;
     private int level;
     private int points = 0;
+    private int index;
 
-    public Cell(byte b, int level) {
+    public Cell(byte b, int level, int index) {
 
         this.level = level;
+        this.index = index;
 
-        int points = (b >> 4) & 15; // este si srve
+        int points = (b >>> 4) & 15; // este si srve
         int walls = (b) & 15; // este igual
 
         if ((walls & 1) == 1)
             east = true;
 
-        if (((walls >> 1) & 1) == 1)
+        if (((walls >>> 1) & 1) == 1)
             north = true;
 
-        if (((walls >> 2) & 1) == 1)
+        if (((walls >>> 2) & 1) == 1)
             west = true;
 
-        if (((walls >> 3) & 1) == 1)
+        if (((walls >>> 3) & 1) == 1)
             south = true;
     }
 
     public int getPoints() {
         return points;
+    }
+
+    public int getInd() {
+        return index;
     }
 
     public int getLevel() {

@@ -21,10 +21,10 @@ public class RoomsSvg {
         int yUp = 10;
         int yDown = 20;
         String svg = String.format(svgMaze, (col * 10) + 20, (row * 10) + 20);
-        int level = 0;
+        int level = 1;
 
-        for (int i = 6; i < graph.length; i++) {
-            if (level != graph[i].getLevel()) {
+        for (int i = 0; i < graph.length; i++) {
+            if (level < graph[i].getLevel()) {
                 xLeft = 10;
                 xRight = 20;
                 yUp += 10;
@@ -53,6 +53,10 @@ public class RoomsSvg {
             svg += String.format(westWall, x1, y1, x1, y2);
 
         return svg;
+
+    }
+
+    private String createPath(Lista<VerticeGrafica<Cell>> path) {
 
     }
 
