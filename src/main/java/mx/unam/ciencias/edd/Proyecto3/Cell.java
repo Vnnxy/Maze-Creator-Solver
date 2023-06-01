@@ -11,6 +11,9 @@ public class Cell {
     private int x1 = 0;
     private int y1 = 0;
 
+    /* This will be used when generating a maze */
+    private Boolean used = false;
+
     public Cell(byte b, int level, int index) {
 
         this.level = level;
@@ -74,6 +77,14 @@ public class Cell {
 
     public int getY() {
         return y1;
+    }
+
+    public Boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed() {
+        used = true;
     }
 
 }

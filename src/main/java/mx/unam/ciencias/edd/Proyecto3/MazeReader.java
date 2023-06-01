@@ -11,6 +11,7 @@ public class MazeReader {
     /* Array containing the first four bytes that our program requires. */
     private byte[] firstFour = { 0x4d, 0x41, 0x5a, 0x45 };
 
+    /* Method we will use to check the format of the given file */
     private void checkFormat(byte[] content) {
         // Maze check
         int i = 0;
@@ -30,6 +31,7 @@ public class MazeReader {
 
     }
 
+    /* Method we will use to make the layout of the maze */
     public Grafica<Cell> getCells(byte[] content) {
         int rows = content[4];
         int columns = content[5];
@@ -51,6 +53,7 @@ public class MazeReader {
             contentCell[j] = cell;
             j++;
         }
+
         int ec = columns - 1;
         int wc = 0;
 
@@ -97,12 +100,14 @@ public class MazeReader {
 
     }
 
+    /* Solves and creates an svg representation of the path */
     public String solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
         Lista<VerticeGrafica<Cell>> path = graph.dijkstra(origin, destination);
         RoomsSvg rm = new RoomsSvg();
         return rm.createPath(path);
     }
 
+    /* Method we will use to check the borders, probably broken ftm */
     private void checkBorders(byte[] content, int column, int rows) {
         checkNorthWall(content, column, rows);
         checkSouthWall(content, column, rows);
