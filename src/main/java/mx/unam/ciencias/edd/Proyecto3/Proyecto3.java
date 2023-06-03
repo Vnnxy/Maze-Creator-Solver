@@ -17,10 +17,6 @@ public class Proyecto3 {
             bytes[i] = cell.getByte();
             i++;
         }
-        try {
-            System.out.write(bytes);
-        } catch (IOException ioe) {
-        }
 
     }
 }

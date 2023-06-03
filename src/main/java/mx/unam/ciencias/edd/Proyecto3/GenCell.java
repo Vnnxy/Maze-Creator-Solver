@@ -13,30 +13,38 @@ public class GenCell {
         east
     }
 
+    /* Our byte */
     private int info;
-
+    /* Index needed for parsing */
+    private int index;
+    /* Variable that tells us if a cell has been used/ has a door */
     private boolean hasDoor = false;
-
-    private Boolean east;
-    private Boolean west;
-    private Boolean north;
-    private Boolean south;
-
+    /* The base 1111 for our bytes, a mask */
     private int base = 0xFF;
 
-    public GenCell(int points) {
+    /* Public constructor for our generator cells */
+    public GenCell(int points, int index) {
         int p = points;
+        this.index = index;
         info = base; // need to add points
     }
 
+    /* Returns the index of our cell */
+    public int getIndex() {
+        return index;
+    }
+
+    /* Returns ture if the cell has a door leading outside */
     public Boolean hasDoor() {
         return hasDoor;
     }
 
+    /* It gives us a representation of our cell in bytes */
     public byte getByte() {
         return (byte) info;
     }
 
+    /* Sets the cell with a door */
     public void tocToc() {
         this.hasDoor = true;
     }

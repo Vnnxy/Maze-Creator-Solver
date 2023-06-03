@@ -12,6 +12,7 @@ public class FileReader {
     public FileReader() {
     }
 
+    /* Our method that reads from the stdin s given file. */
     public byte[] readFile(String path) {
         try {
 
