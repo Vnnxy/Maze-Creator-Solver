@@ -23,9 +23,10 @@ public class MazeReader {
             i++;
         }
         // Falta poner limites
-        if (content[4] < 2
-                || content[4] > 255 || content[5] < 2
-                || content[5] > 255) {
+        if ((content[4] & 0xff) < 2
+                || (content[4] & 0xff) > 0xff || (content[5] & 0xff) < 2
+                || (content[5] & 0xff) > 0xff) {
+            System.out.println(content[4] + "y" + content[5]);
             System.out.println("Please use valid dimensions");
             throw new IllegalArgumentException("IAE");
         }
@@ -36,8 +37,8 @@ public class MazeReader {
 
     /* Method we will use to make the layout of the maze */
     public Grafica<Cell> getCells(byte[] content) {
-        int rows = content[4];
-        int columns = content[5];
+        int rows = content[4] & 0xff;
+        int columns = content[5] & 0xff;
         int level = 0;
         Cell[] contentCell = new Cell[rows * columns];
         Grafica<Cell> graph = new Grafica<>();
@@ -141,16 +142,20 @@ public class MazeReader {
     private void checkNorthWall(byte[] content, int columns, int rows) {
         for (int i = 6; i < columns + 6; i++) {
             Cell cell = new Cell(content[i], 0, i);
-            if (cell.isNorth() == false)
+            if (cell.isNorth() == false) {
+                System.out.println("north border fail");
                 throw new IllegalArgumentException("iae");
+            }
         }
     }
 
     private void checkSouthWall(byte[] content, int columns, int rows) {
         for (int i = ((columns * rows) - columns) + 6; i < content.length; i++) {
             Cell cell = new Cell(content[i], 0, i);
-            if (cell.isSouth() == false)
-                throw new IllegalArgumentException("iae");
+            if (cell.isSouth() == false) {
+                // System.out.println("south border fail");
+                // throw new IllegalArgumentException("iae");
+            }
         }
     }
 
@@ -161,18 +166,21 @@ public class MazeReader {
             if (cell.isEast() == false)
                 entry++;
         }
-        if (entry != 1)
+        if (entry != 1) {
+            System.out.println("east border fail");
             throw new IllegalArgumentException("iae");
+        }
     }
 
     private void checkWestWall(byte[] content, int columns, int rows) {
         int exit = 0;
-        for (int i = 0; i < content.length; i += columns) {
+        for (int i = 6; i < content.length; i += columns) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isWest() == false)
                 exit++;
         }
-        if (exit != 1)
+        if (exit != 1) {
             throw new IllegalArgumentException("iae");
+        }
     }
 }

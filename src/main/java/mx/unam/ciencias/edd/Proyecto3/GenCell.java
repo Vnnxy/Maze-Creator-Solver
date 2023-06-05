@@ -3,18 +3,15 @@ package mx.unam.ciencias.edd.Proyecto3;
 public class GenCell {
 
     /* Our byte */
-    private int info = 0xF;
+    private int info = 0xFF;
     /* Index needed for parsing */
     private int index;
     /* Variable that tells us if a cell has been used/ has a door */
     private boolean hasDoor = false;
-    /* The base 1111 for our bytes, a mask */
-    private int base = 0xF;
 
     /* Public constructor for our generator cells */
     public GenCell(int points, int index) {
         // Puntos
-
         this.index = index;
 
     }
