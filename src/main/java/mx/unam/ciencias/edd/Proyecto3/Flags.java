@@ -4,27 +4,30 @@ import mx.unam.ciencias.edd.Lista;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 
-public class OpcionesBandera {
+public class Flags {
 
     private String[] path;
-    private long semilla;
-    private Boolean generador;
+    private long seed;
+    private Boolean gen;
     private int width;
     private int height;
 
-    public OpcionesBandera(Lista<String> entrada) {
-        determinaAccion(entrada);
-        if (generador) {
+    /* Our flags */
+    public Flags(Lista<String> entrada) {
+        chooseAction(entrada);
+        // We are creating a maze
+        if (gen) {
             flags(path);
         } else {
-            obtenSolucion(null);
+            // We are solving
+            FileInput.inputDet();
         }
     }
 
-    /* Determinamos si se quiere generar un laberinto o se quiere resolverlo. */
-    public void determinaAccion(Lista<String> entrada) {
+    /* We decide what we want to do */
+    public void chooseAction(Lista<String> entrada) {
         if (entrada.contiene("-g"))
-            generador = true;
+            gen = true;
     }
 
     /* Método para revisar las banderas de un arreglo */
@@ -32,7 +35,7 @@ public class OpcionesBandera {
         for (int i = 0; i < flag.length; i++) {
             switch (flag[i]) {
                 case "-g":
-                    generador = true;
+                    gen = true;
                     break;
 
                 case "-w":
@@ -49,18 +52,19 @@ public class OpcionesBandera {
                 case "-s":
                     if (i + 1 > flag.length)
                         throw new IllegalArgumentException("iae");
-                    semilla = Integer.parseInt(flag[i + 1]);
+                    seed = Integer.parseInt(flag[i + 1]);
                     break;
 
                 default:
 
-                    semilla = defaultSeed();
+                    seed = defaultSeed();
                     break;
 
             }
         }
     }
 
+    /* We get a seed form the computer clock */
     private long defaultSeed() {
         LocalDateTime now = LocalDateTime.now();
         long seed;

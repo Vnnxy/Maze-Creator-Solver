@@ -2,31 +2,20 @@ package mx.unam.ciencias.edd.Proyecto3;
 
 public class GenCell {
 
-    /*
-     * I'll probably use this instead of strings. I just don´t remember how to use
-     * enums
-     */
-    private enum direction {
-        north,
-        south,
-        west,
-        east
-    }
-
     /* Our byte */
-    private int info;
+    private int info = 0xF;
     /* Index needed for parsing */
     private int index;
     /* Variable that tells us if a cell has been used/ has a door */
     private boolean hasDoor = false;
     /* The base 1111 for our bytes, a mask */
-    private int base = 0xFF;
+    private int base = 0xF;
 
     /* Public constructor for our generator cells */
     public GenCell(int points, int index) {
-        int p = points;
+        // Puntos
         this.index = index;
-        info = base; // need to add points
+
     }
 
     /* Returns the index of our cell */
@@ -56,24 +45,28 @@ public class GenCell {
             case 0: {
                 // door leading south
                 info = info & 0xF7;
+                // System.out.println(" sur " + info);
                 break;
             }
             // west
             case 1: {
                 // door leading west
                 info = info & 0xFB;
+                // System.out.println(" oeste " + info);
                 break;
             }
             // north
             case 2: {
                 // door leading north
                 info = info & 0xFD;
+                // System.out.println(" norte " + info);
                 break;
             }
             // east
             case 3: {
                 // door leading east
                 info = info & 0xFE;
+                // System.out.println(" este " + info);
                 break;
             }
         }

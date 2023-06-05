@@ -11,6 +11,8 @@ public class MazeGen {
     private GenCell[] grid;
     /* The number of columns in our maze */
     private int width;
+    /* The number of rows in our maze */
+    private int height;
     /* The total number of cells in our maze */
     private int total;
     /* Our random number generator */
@@ -19,6 +21,7 @@ public class MazeGen {
     /* Our public constructor, it will create a maze, with a given size and seed */
     public MazeGen(int width, int height, int seed) {
         this.width = width;
+        this.height = height;
         this.random = new Random(seed);
         createGrid(width, height, random);
     }
@@ -38,6 +41,7 @@ public class MazeGen {
             grid[i] = new GenCell(points, i);
         }
         growingTree(grid);
+        createInNOut();
     }
 
     /*
@@ -48,97 +52,118 @@ public class MazeGen {
         Pila<GenCell> stack = new Pila<>();
         // We pick a random cell in our grid
         int i = random.nextInt(grid.length - 1);
-        System.out.println(i + "inciio");
         stack.mete(grid[i]);
+        // System.out.println("start " + i);
+        int dir;
 
         while (!stack.esVacia()) {
             GenCell currentCell = stack.mira();
-            int dir;
+            currentCell.tocToc();
             int j = currentCell.getIndex();
-
             // We check for borders
             dir = borderPatrol(j);
+            // System.out.println("Actual: " + j);
+            // System.out.println("direccion: " + dir);
             int nIndex = getNeighbour(j, dir);
 
             if (grid[nIndex].hasDoor() == false) {
-                System.out.println("Se avanzó a una celda sin puerta" + nIndex);
-                stack.mete(grid[nIndex]);
+                // System.out.println("Me muevo a " + nIndex);
 
+                stack.mete(grid[nIndex]);
+                // System.out.println("Puerta actual");
                 currentCell.setDoor(dir);
-                currentCell.tocToc();
+                // System.out.println("vecino indice: " + nIndex);
                 grid[nIndex].setDoor(reverseDoor(dir));
             } else {
                 dir = hasUnvisitedDoors(grid, j);
-                System.out.println("else dir: " + dir);
                 nIndex = getNeighbour(j, dir);
-                if (dir > -1 && grid[nIndex].hasDoor() == false) { // Si pongo dir != 1 si funciona pero no se por que
-                    System.out.println("Else Se avanzó a una celda sin puerta" + nIndex);
+                if (dir != -1 && grid[nIndex].hasDoor() == false) {
+                    // System.out.println("Me muevo a " + nIndex);
+                    // System.out.println("Me muevo a hh " + nIndex);
                     stack.mete(grid[nIndex]);
+                    // System.out.println("Abro puerta");
                     currentCell.setDoor(dir);
-                    currentCell.tocToc();
+                    // System.out.println("vecino indice: " + nIndex);
                     grid[nIndex].setDoor(reverseDoor(dir));
-                } else if (dir < 0) {
+                } else {
                     stack.saca();
-                    System.out.println("saqué");
+
                 }
             }
         }
+    }
+
+    private void createInNOut() {
+        int entryIndex = width * random.nextInt(height);
+        int exitIndex = (width - 1) + (width * random.nextInt(height));
+
+        grid[entryIndex].setDoor(1);
+        // System.out.println("Entrada: " + entryIndex);
+        grid[exitIndex].setDoor(3);
+        // System.out.println("Salida: " + exitIndex);
     }
 
     private int borderPatrol(int ind) {
         int dir;
         Boolean north = false;
         Boolean south = false;
-        Boolean east = false;
-        Boolean west = false;
 
         // We first check if is north or south, if the answer is neither, it will fall
         // through the statements
         // North check
         if (ind < width) {
-            System.out.println("north is border");
             north = true;
             dir = getControlledRandom(2);// only 0 1 3 north
+            // System.out.println("north border");
 
             // NorthEast 0 1
             if (isEastBorder(ind)) {
-                dir = random.nextInt(2);
+                return dir = random.nextInt(2);
+
             }
             // NorthWest 0 3
             else if (isWestBorder(ind)) {
                 int h = random.nextInt(2);
                 if (h == 0)
-                    dir = h;
+                    return dir = h;
                 else
-                    dir = 3;
+                    return dir = 3;
+
             }
+            return dir;
         }
         // South check
-        if (ind > total - width) {
-            System.out.println("south is border");
+        if (ind >= total - width) {
+
             south = true;
-            dir = random.nextInt(3 + 1);// only 1 2 3 south
+            dir = random.nextInt(3) + 1;// only 1 2 3 south
+            // System.out.println("South border");
 
             // SouthEast 1 2
             if (isEastBorder(ind)) {
-                dir = random.nextInt(2) + 1;
+                // System.out.println("South east border");
+                return dir = random.nextInt(2) + 1;
+
             }
             // SouthWest 2 3
             else if (isWestBorder(ind)) {
-                dir = random.nextInt(2) + 2;
+                return dir = random.nextInt(2) + 2;
+
             }
+
+            return dir;
         }
 
         // <We now check if it is west or east border.
 
         else if (ind % width == 0) {
-            System.out.println("west is border");
-            dir = getControlledRandom(1); // only 0 2 3 west
+            return dir = getControlledRandom(1); // only 0 2 3 west
+
         }
 
         else if ((ind + 1) % (width) == 0 && ind + 1 < total) {
-            System.out.println("east is border");
-            dir = random.nextInt(3); // only 0 1 2 east
+            return dir = random.nextInt(3); // only 0 1 2 east
+
         }
         // It is not a border
         else {
@@ -148,7 +173,7 @@ public class MazeGen {
     }
 
     private boolean isEastBorder(int i) {
-        return (i + 1 % (width) == 0 && +i + 1 < total);
+        return ((i + 1) % (width) == 0);
     }
 
     private boolean isWestBorder(int i) {
@@ -157,10 +182,10 @@ public class MazeGen {
 
     private int getControlledRandom(int i) {
         int dir = random.nextInt(4);
-        if (dir == i) {
-            dir = getControlledRandom(i);
+        if (dir != i) {
+            return dir;
         }
-        return dir;
+        return getControlledRandom(i);
 
     }
 
@@ -183,25 +208,6 @@ public class MazeGen {
     }
 
     /*
-     * Auxiliary method we will use to get the index of the neighbour, depending on
-     * the direction we are facing
-     */
-    private int getIndex(int index, int dir) {
-        switch (dir) {
-            case 0:
-                return index + width;
-            case 1:
-                return index - 1;
-            case 2:
-                return index - width;
-            case 3:
-                return index + 1;
-            default:
-                return -1;
-        }
-    }
-
-    /*
      * Auxiliary method, it will tell us if a given cell has any unvisited
      * neighbours
      */
@@ -210,18 +216,15 @@ public class MazeGen {
         int e = (index + 1 < grid.length) ? index + 1 : -1;
         int s = (index + width < grid.length) ? index + width : -1;
         int n = (index - width) > 0 ? index - width : -1;
-
-        System.out.println("w: " + w + "e: " + e + "s: " + s + "n: " + n);
-
-        if (w > 0 && (index - 1) % (width - 1) != 0) {
+        if (w > 0 && (index) % (width) != 0) {
             if (!grid[w].hasDoor())
                 return 1;
         }
-        if (s > 0 && (index + width) <= total - width) {
+        if (s > 0) {
             if (!grid[s].hasDoor())
                 return 0;
         }
-        if (n > 0 && (index - width) >= (width)) { // Falla, no se por que
+        if (n > 0) { // Falla, no se por que
             if (!grid[n].hasDoor())
                 return 2;
         }
@@ -246,9 +249,9 @@ public class MazeGen {
                 // if (index > total - width)
                 // break;
                 neig = index + width;
-                if (neig > grid.length)
-                    neig = getNeighbour(index, random.nextInt(4));
-                System.out.println("so");
+                if (neig > total)
+                    neig = getNeighbour(index, random.nextInt(4) + 1);
+                // System.out.println("neigbour is south");
                 break;
             }
             // west
@@ -258,7 +261,7 @@ public class MazeGen {
                 neig = index - 1;
                 if (neig < 0)
                     neig = getNeighbour(index, random.nextInt(4));
-                System.out.println("we");
+                // System.out.println("neigbour is west");
                 break;
             }
             // north
@@ -268,7 +271,7 @@ public class MazeGen {
                 neig = index - width;
                 if (neig < 0)
                     neig = getNeighbour(index, random.nextInt(4));
-                System.out.println("no");
+                // System.out.println("neigbour is north");
                 break;
             }
             // east
@@ -278,7 +281,7 @@ public class MazeGen {
                 neig = index + 1;
                 if (neig > grid.length)
                     neig = getNeighbour(index, random.nextInt(4));
-                System.out.println("ea");
+                // System.out.println("neigbour is east");
                 break;
             }
         }

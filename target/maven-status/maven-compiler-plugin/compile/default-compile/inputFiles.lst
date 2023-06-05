@@ -1,6 +1,5 @@
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/ArbolRojinegro.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/FileFormat.java
-/Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/MazeBack.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/OpcionesBandera.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/MazeReader.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/ArbolBinarioCompleto.java
@@ -35,6 +34,7 @@
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/VerticeArbolBinario.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Diccionario.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Pila.java
+/Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/MazeRunner.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/MazeGen.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/ValorIndexable.java
 /Users/akira/proyecto3/src/main/java/mx/unam/ciencias/edd/Proyecto3/GenCell.java
