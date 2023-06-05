@@ -38,6 +38,7 @@ public class MazeGen {
 
         for (int i = 0; i < grid.length; i++) {
             int points = rand.nextInt(16);
+
             grid[i] = new GenCell(points, i);
         }
         growingTree(grid);
@@ -67,7 +68,7 @@ public class MazeGen {
             int nIndex = getNeighbour(j, dir);
 
             if (grid[nIndex].hasDoor() == false) {
-                // System.out.println("Me muevo a " + nIndex);
+                // ystem.out.println("Me muevo a " + nIndex);
 
                 stack.mete(grid[nIndex]);
                 // System.out.println("Puerta actual");
@@ -76,10 +77,11 @@ public class MazeGen {
                 grid[nIndex].setDoor(reverseDoor(dir));
             } else {
                 dir = hasUnvisitedDoors(grid, j);
+                // System.out.println(dir + " dir");
                 nIndex = getNeighbour(j, dir);
                 if (dir != -1 && grid[nIndex].hasDoor() == false) {
-                    // System.out.println("Me muevo a " + nIndex);
-                    // System.out.println("Me muevo a hh " + nIndex);
+                    // System.out.println("Me muevo e" + nIndex);
+
                     stack.mete(grid[nIndex]);
                     // System.out.println("Abro puerta");
                     currentCell.setDoor(dir);
@@ -212,11 +214,12 @@ public class MazeGen {
      * neighbours
      */
     private int hasUnvisitedDoors(GenCell[] grid, int index) {
-        int w = (index - 1 > 0) ? index - 1 : -1;
+        int w = (index - 1 > -1) ? index - 1 : -1;
         int e = (index + 1 < grid.length) ? index + 1 : -1;
         int s = (index + width < grid.length) ? index + width : -1;
         int n = (index - width) > 0 ? index - width : -1;
-        if (w > 0 && (index) % (width) != 0) {
+
+        if (w >= 0 && (index) % (width) != 0) {
             if (!grid[w].hasDoor())
                 return 1;
         }
@@ -224,7 +227,7 @@ public class MazeGen {
             if (!grid[s].hasDoor())
                 return 0;
         }
-        if (n > 0) { // Falla, no se por que
+        if (n >= 0) { // Falla, no se por que
             if (!grid[n].hasDoor())
                 return 2;
         }

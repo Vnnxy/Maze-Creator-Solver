@@ -9,7 +9,6 @@ public class MazeRunner {
         this.seed = seed;
 
         writeFile();
-        getDimensions();
         createMaze();
     }
 
@@ -17,7 +16,7 @@ public class MazeRunner {
     private int height;
     private int seed;
 
-    private byte[] firstFour = { 0x4d, 0x41, 0x5a, 0x45, 0x04, 0x04 };
+    private byte[] firstFour = { 0x4d, 0x41, 0x5a, 0x45 };
 
     private void writeFile() {
         try {

@@ -6,68 +6,65 @@ import java.time.temporal.ChronoField;
 
 public class Flags {
 
-    private String[] path;
-    private long seed;
-    private Boolean gen;
-    private int width;
-    private int height;
+    private int seed = -1;
+    private Boolean gen = false;
+    private int width = 0;
+    private int height = 0;
 
     /* Our flags */
-    public Flags(Lista<String> entrada) {
+    public Flags(String[] entrada) {
         chooseAction(entrada);
         // We are creating a maze
         if (gen) {
-            flags(path);
+            flags(entrada);
+            create();
         } else {
             // We are solving
-            FileInput.inputDet();
+            FileInput.inputDet(entrada);
         }
     }
 
     /* We decide what we want to do */
-    public void chooseAction(Lista<String> entrada) {
-        if (entrada.contiene("-g"))
-            gen = true;
+    public void chooseAction(String[] entrada) {
+        for (int i = 0; i < entrada.length; i++) {
+            if (entrada[i].equals("-g")) {
+                gen = true;
+                break;
+            }
+        }
+
     }
 
     /* Método para revisar las banderas de un arreglo */
     public void flags(String[] flag) {
         for (int i = 0; i < flag.length; i++) {
+
             switch (flag[i]) {
-                case "-g":
-                    gen = true;
-                    break;
 
                 case "-w":
-                    if (i + 1 > flag.length)
+                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
-                    if (revisaNumeros(flag[i + 1]) == false)
-                        width = Integer.parseInt(flag[i + 1]);
+
+                    width = Integer.parseInt(flag[i + 1]);
                     break;
                 case "-h":
-                    if (i + 1 > flag.length)
+                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
                     height = Integer.parseInt(flag[i + 1]);
+
                     break;
                 case "-s":
-                    if (i + 1 > flag.length)
+                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
                     seed = Integer.parseInt(flag[i + 1]);
                     break;
-
-                default:
-
-                    seed = defaultSeed();
-                    break;
-
             }
         }
     }
 
     /* We get a seed form the computer clock */
-    private long defaultSeed() {
+    private void defaultSeed() {
         LocalDateTime now = LocalDateTime.now();
-        long seed;
 
         int year = now.getYear();
         int month = now.getMonthValue();
@@ -78,11 +75,15 @@ public class Flags {
         int millis = now.get(ChronoField.MILLI_OF_SECOND);
 
         seed = year + month + day + hour + minute + second + millis;
-        return seed;
 
     }
 
-    public void obtenSolucion(String archivo) {
+    public void create() {
+        if (width == 0 || height == 0)
+            throw new IllegalArgumentException("iae");
+        if (seed == -1)
+            defaultSeed();
+        MazeRunner mr = new MazeRunner(width, height, seed);
 
     }
 
