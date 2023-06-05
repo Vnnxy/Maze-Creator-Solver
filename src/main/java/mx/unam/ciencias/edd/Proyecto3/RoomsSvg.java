@@ -62,6 +62,7 @@ public class RoomsSvg {
 
     public String createPath(Lista<VerticeGrafica<Cell>> path) {
         String svgPath = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='yellowgreen' stroke-width='1' />\n";
+        String circle = "<circle cx='%1$d' cy='%2$d' r='2' fill='%3$s' />\n";
         String svg = "";
         Cell[] arrPath = new Cell[path.getLongitud()];
         int i = 0;
@@ -69,6 +70,7 @@ public class RoomsSvg {
             arrPath[i] = cell.get();
             i++;
         }
+
         for (int j = 0; j < arrPath.length - 1; j++) {
             int x1 = arrPath[j].getX();
             int x2 = arrPath[j + 1].getX();
@@ -76,6 +78,13 @@ public class RoomsSvg {
             int y2 = arrPath[j + 1].getY();
             svg += String.format(svgPath, x1, y1, x2, y2);
         }
+
+        int entryX = arrPath[0].getX();
+        int entryY = arrPath[0].getY();
+        int exitX = arrPath[arrPath.length - 1].getX();
+        int exitY = arrPath[arrPath.length - 1].getY();
+        svg += String.format(circle, entryX, entryY, "MediumPurple");
+        svg += String.format(circle, exitX, exitY, "Lightseagreen");
         return svg;
     }
 

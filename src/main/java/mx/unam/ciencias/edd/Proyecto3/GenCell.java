@@ -14,6 +14,7 @@ public class GenCell {
     /* Public constructor for our generator cells */
     public GenCell(int points, int index) {
         // Puntos
+
         this.index = index;
 
     }

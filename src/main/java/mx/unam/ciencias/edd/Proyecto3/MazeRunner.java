@@ -8,6 +8,9 @@ public class MazeRunner {
         this.width = width;
         this.seed = seed;
 
+        if (height < 2 || height > 0xFF || width < 2 || width > 0xFF)
+            throw new IllegalArgumentException("iae");
+
         writeFile();
         createMaze();
     }

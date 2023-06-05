@@ -16,8 +16,13 @@ public class Flags {
         chooseAction(entrada);
         // We are creating a maze
         if (gen) {
-            flags(entrada);
-            create();
+            try {
+                flags(entrada);
+                create();
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Please check your input, all dimensions are required");
+                System.exit(1);
+            }
         } else {
             // We are solving
             FileInput.inputDet(entrada);
@@ -42,19 +47,25 @@ public class Flags {
             switch (flag[i]) {
 
                 case "-w":
-                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
+                    if (i + 1 >= flag.length)
+                        throw new IllegalArgumentException("iae");
+                    if (revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
 
                     width = Integer.parseInt(flag[i + 1]);
                     break;
                 case "-h":
-                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
+                    if (i + 1 >= flag.length)
+                        throw new IllegalArgumentException("iae");
+                    if (revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
                     height = Integer.parseInt(flag[i + 1]);
 
                     break;
                 case "-s":
-                    if (i + 1 > flag.length || revisaNumeros(flag[i + 1]) == false)
+                    if (i + 1 >= flag.length)
+                        throw new IllegalArgumentException("iae");
+                    if (revisaNumeros(flag[i + 1]) == false)
                         throw new IllegalArgumentException("iae");
                     seed = Integer.parseInt(flag[i + 1]);
                     break;
@@ -83,7 +94,12 @@ public class Flags {
             throw new IllegalArgumentException("iae");
         if (seed == -1)
             defaultSeed();
-        MazeRunner mr = new MazeRunner(width, height, seed);
+        try {
+            MazeRunner mr = new MazeRunner(width, height, seed);
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Please use valid dimensions");
+            System.exit(1);
+        }
 
     }
 

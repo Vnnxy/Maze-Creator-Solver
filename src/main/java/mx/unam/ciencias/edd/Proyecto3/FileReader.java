@@ -21,14 +21,21 @@ public class FileReader {
 
             File file = new File(path);
             FileInputStream fis = new FileInputStream(path);
-
-            // byte[] fileContent = Files.readAllBytes(file.toPath());
             byte[] fileContent = fis.readAllBytes();
             MazeReader mze = new MazeReader();
-            mze.getCells(fileContent);
+            try {
+                mze.checkFormat(fileContent);
+                mze.getCells(fileContent);
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Please use a valid file");
+                System.exit(1);
+            }
 
         } catch (IOException ioe) {
+            System.out.println("Cannot access the given file");
             System.exit(1);
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Wrong dimensions");
         }
     }
 
@@ -36,8 +43,17 @@ public class FileReader {
         try {
             byte[] data = System.in.readAllBytes();
             MazeReader mze = new MazeReader();
-            mze.getCells(data);
+            try {
+                mze.checkFormat(data);
+                mze.getCells(data);
+            } catch (IllegalArgumentException iae) {
+                System.out.println("Please use a valid file");
+                System.exit(1);
+            }
+
         } catch (IOException ioe) {
+            System.out.println("Cannot access the given file");
+            System.exit(1);
         }
 
     }

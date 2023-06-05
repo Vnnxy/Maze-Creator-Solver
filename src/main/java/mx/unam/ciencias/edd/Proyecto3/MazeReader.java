@@ -12,22 +12,25 @@ public class MazeReader {
     private byte[] firstFour = { 0x4d, 0x41, 0x5a, 0x45 };
 
     /* Method we will use to check the format of the given file */
-    private void checkFormat(byte[] content) {
+    public void checkFormat(byte[] content) {
         // Maze check
         int i = 0;
         while (i < 4) {
             if (content[i] != firstFour[i]) {
-                System.out.println("MAZE erronea");
+                System.out.println("Please use a valid format");
                 throw new IllegalArgumentException("IAE");
             }
             i++;
         }
         // Falta poner limites
-        if (content[i + 1] < 2
-                || content[i + 1] > 0xFF) {
-            System.out.println("Dimension erronea");
+        if (content[4] < 2
+                || content[4] > 255 || content[5] < 2
+                || content[5] > 255) {
+            System.out.println("Please use valid dimensions");
             throw new IllegalArgumentException("IAE");
         }
+
+        // checkBorders(content, content[4], content[5]);
 
     }
 
@@ -48,8 +51,12 @@ public class MazeReader {
                 level++;
 
             Cell cell = new Cell(content[i], level, j);
-
-            graph.agrega(cell);
+            try {
+                graph.agrega(cell);
+            } catch (IllegalArgumentException iae) {
+                System.out.println("There is a discrepancy coming from the rooms");
+                System.exit(1);
+            }
             contentCell[j] = cell;
             j++;
         }
@@ -66,6 +73,9 @@ public class MazeReader {
                     destination = currentCell;
                 }
                 if (currentCell.isSouth() == false) {
+                    if (i + columns > contentCell.length) {
+                        throw new IllegalArgumentException("iae");
+                    }
                     graph.conecta(currentCell, contentCell[i + columns],
                             currentCell.getPoints() + 1 + contentCell[i + columns].getPoints());
                 }
@@ -81,11 +91,17 @@ public class MazeReader {
             }
 
             if (currentCell.isEast() == false) {
+                if (i + 1 > contentCell.length) {
+                    throw new IllegalArgumentException("iae");
+                }
                 graph.conecta(currentCell, contentCell[i + 1],
                         currentCell.getPoints() + 1 + contentCell[i + 1].getPoints());
             }
 
             if (currentCell.isSouth() == false) {
+                if (i + columns > contentCell.length) {
+                    throw new IllegalArgumentException("iae");
+                }
                 graph.conecta(currentCell, contentCell[i + columns],
                         currentCell.getPoints() + 1 + contentCell[i + columns].getPoints());
             }
@@ -93,7 +109,12 @@ public class MazeReader {
         }
         RoomsSvg rm = new RoomsSvg();
         String a = rm.createRooms(contentCell, columns, rows);
-        a += solveMaze(graph, entry, destination) + "</svg>";
+        try {
+            a += solveMaze(graph, entry, destination) + "</svg>";
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Please use a valid maze, this maze has no solution");
+            System.exit(1);
+        }
         System.out.println(a);
 
         return graph;
@@ -103,6 +124,8 @@ public class MazeReader {
     /* Solves and creates an svg representation of the path */
     public String solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
         Lista<VerticeGrafica<Cell>> path = graph.dijkstra(origin, destination);
+        if (path.esVacia())
+            throw new IllegalArgumentException("iae");
         RoomsSvg rm = new RoomsSvg();
         return rm.createPath(path);
     }
@@ -116,34 +139,40 @@ public class MazeReader {
     }
 
     private void checkNorthWall(byte[] content, int columns, int rows) {
-        for (int i = 6; i < columns; i++) {
+        for (int i = 6; i < columns + 6; i++) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isNorth() == false)
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("iae");
         }
     }
 
     private void checkSouthWall(byte[] content, int columns, int rows) {
-        for (int i = (columns * rows) - columns; i < content.length; i++) {
+        for (int i = ((columns * rows) - columns) + 6; i < content.length; i++) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isSouth() == false)
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("iae");
         }
     }
 
     private void checkEastWall(byte[] content, int columns, int rows) {
-        for (int i = columns - 1; i < content.length; i += columns) {
+        int entry = 0;
+        for (int i = columns + 5; i < content.length; i += columns) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isEast() == false)
-                throw new IllegalArgumentException();
+                entry++;
         }
+        if (entry != 1)
+            throw new IllegalArgumentException("iae");
     }
 
     private void checkWestWall(byte[] content, int columns, int rows) {
+        int exit = 0;
         for (int i = 0; i < content.length; i += columns) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isWest() == false)
-                throw new IllegalArgumentException();
+                exit++;
         }
+        if (exit != 1)
+            throw new IllegalArgumentException("iae");
     }
 }
