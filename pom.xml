@@ -9,9 +9,9 @@
   <version>EDD</version>
   <packaging>jar</packaging>
 
-  <name>Proyecto 2</name>
+  <name>Proyecto 3</name>
   <description>
-    Proyecto 2
+    Proyecto 3
   </description>
   
   <properties>
@@ -64,7 +64,7 @@
 	<configuration>
 	  <archive>
 	    <manifest>
-	      <mainClass>mx.unam.ciencias.edd.Proyecto2.Proyecto2</mainClass>
+	      <mainClass>mx.unam.ciencias.edd.Proyecto3.Proyecto3</mainClass>
 	    </manifest>
 	  </archive>
 	</configuration>
@@ -84,7 +84,7 @@
 
     </plugins>
 
-    <finalName>proyecto2</finalName>
+    <finalName>proyecto3</finalName>
   </build>
 
   <reporting>
