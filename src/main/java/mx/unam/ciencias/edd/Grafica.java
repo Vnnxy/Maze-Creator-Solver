@@ -720,7 +720,7 @@ public class Grafica<T> implements Coleccion<T> {
 
         MonticuloDijkstra<Vertice> heap;
 
-        int n = vertices.getElementos();
+        long n = vertices.getElementos();
         if (aristas > ((n * (n - 1)) / 2) - n)
             heap = new MonticuloArreglo<Vertice>(vertices, vertices.getElementos());
         else

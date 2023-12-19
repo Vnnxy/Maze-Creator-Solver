@@ -38,7 +38,6 @@ public class MazeGen {
 
         for (int i = 0; i < grid.length; i++) {
             int points = rand.nextInt(16);
-
             grid[i] = new GenCell(points, i);
         }
         growingTree(grid);
