@@ -23,21 +23,25 @@ public class MazeReader {
             i++;
         }
         // Falta poner limites
-        if (content[4] < 2
-                || content[4] > 255 || content[5] < 2
-                || content[5] > 255) {
+        int w = content[4] & 0xff;
+        int h = content[5] & 0xff;
+
+        if (w < 2
+                || w > 0xff || h < 2
+                || h > 0xff) {
+            System.out.println(content[4] + "y" + content[5]);
             System.out.println("Please use valid dimensions");
             throw new IllegalArgumentException("IAE");
         }
 
-        // checkBorders(content, content[4], content[5]);
+        checkBorders(content, w, h);
 
     }
 
     /* Method we will use to make the layout of the maze */
     public Grafica<Cell> getCells(byte[] content) {
-        int rows = content[4];
-        int columns = content[5];
+        int rows = content[4] & 0xff;
+        int columns = content[5] & 0xff;
         int level = 0;
         Cell[] contentCell = new Cell[rows * columns];
         Grafica<Cell> graph = new Grafica<>();
@@ -108,9 +112,9 @@ public class MazeReader {
 
         }
         RoomsSvg rm = new RoomsSvg();
-        String a = rm.createRooms(contentCell, columns, rows);
+        StringBuffer a = rm.createRooms(contentCell, columns, rows);
         try {
-            a += solveMaze(graph, entry, destination) + "</svg>";
+            a.append(solveMaze(graph, entry, destination) + "</svg>");
         } catch (IllegalArgumentException iae) {
             System.out.println("Please use a valid maze, this maze has no solution");
             System.exit(1);
@@ -122,7 +126,7 @@ public class MazeReader {
     }
 
     /* Solves and creates an svg representation of the path */
-    public String solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
+    public StringBuffer solveMaze(Grafica<Cell> graph, Cell origin, Cell destination) {
         Lista<VerticeGrafica<Cell>> path = graph.dijkstra(origin, destination);
         if (path.esVacia())
             throw new IllegalArgumentException("iae");
@@ -132,25 +136,32 @@ public class MazeReader {
 
     /* Method we will use to check the borders, probably broken ftm */
     private void checkBorders(byte[] content, int column, int rows) {
-        checkNorthWall(content, column, rows);
-        checkSouthWall(content, column, rows);
-        checkWestWall(content, column, rows);
-        checkEastWall(content, column, rows);
+        try {
+            checkNorthWall(content, column, rows);
+            checkSouthWall(content, column, rows);
+            checkWestWall(content, column, rows);
+            checkEastWall(content, column, rows);
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Please use a valid format. Borders are invalid");
+            System.exit(1);
+        }
     }
 
     private void checkNorthWall(byte[] content, int columns, int rows) {
         for (int i = 6; i < columns + 6; i++) {
             Cell cell = new Cell(content[i], 0, i);
-            if (cell.isNorth() == false)
+            if (cell.isNorth() == false) {
                 throw new IllegalArgumentException("iae");
+            }
         }
     }
 
     private void checkSouthWall(byte[] content, int columns, int rows) {
         for (int i = ((columns * rows) - columns) + 6; i < content.length; i++) {
             Cell cell = new Cell(content[i], 0, i);
-            if (cell.isSouth() == false)
+            if (cell.isSouth() == false) {
                 throw new IllegalArgumentException("iae");
+            }
         }
     }
 
@@ -161,18 +172,19 @@ public class MazeReader {
             if (cell.isEast() == false)
                 entry++;
         }
-        if (entry != 1)
+        if (entry != 1) {
             throw new IllegalArgumentException("iae");
+        }
     }
 
     private void checkWestWall(byte[] content, int columns, int rows) {
         int exit = 0;
-        for (int i = 0; i < content.length; i += columns) {
+        for (int i = 6; i < content.length; i += columns) {
             Cell cell = new Cell(content[i], 0, i);
             if (cell.isWest() == false)
                 exit++;
         }
-        if (exit != 1)
-            throw new IllegalArgumentException("iae");
+        if (exit != 1) {
+        }
     }
 }

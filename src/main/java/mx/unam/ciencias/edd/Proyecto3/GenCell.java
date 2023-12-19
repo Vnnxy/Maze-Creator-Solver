@@ -8,12 +8,11 @@ public class GenCell {
     private int index;
     /* Variable that tells us if a cell has been used/ has a door */
     private boolean hasDoor = false;
-    /* The base 1111 for our bytes, a mask */
-    private int base = 0xF;
 
     /* Public constructor for our generator cells */
     public GenCell(int points, int index) {
         // Puntos
+        info = ((points << 4) | 15);
 
         this.index = index;
 

@@ -1,9 +1,7 @@
 package mx.unam.ciencias.edd.Proyecto3;
 
-import mx.unam.ciencias.edd.Grafica;
 import mx.unam.ciencias.edd.Lista;
 import mx.unam.ciencias.edd.VerticeGrafica;
-import mx.unam.ciencias.edd.Proyecto3.Cell;
 import mx.unam.ciencias.edd.Proyecto3.*;
 
 public class RoomsSvg {
@@ -18,12 +16,13 @@ public class RoomsSvg {
     private String westWall = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='black' stroke-width='1' />\n";
     private String eastWall = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='black' stroke-width='1' />\n";
 
-    public String createRooms(Cell[] graph, int col, int row) {
+    public StringBuffer createRooms(Cell[] graph, int col, int row) {
         int xLeft = 10;
         int xRight = 20;
         int yUp = 10;
         int yDown = 20;
-        String svg = String.format(svgMaze, (col * 10) + 20, (row * 10) + 20);
+        StringBuffer svgb = new StringBuffer();
+        svgb.append(String.format(svgMaze, (col * 10) + 20, (row * 10) + 20));
         int level = 1;
 
         for (int i = 0; i < graph.length; i++) {
@@ -37,33 +36,38 @@ public class RoomsSvg {
             level = graph[i].getLevel();
             graph[i].setX(xRight - 5);
             graph[i].setY(yDown - 5);
-            svg += createCell(graph[i], xLeft, xRight, yUp, yDown);
+            svgb.append(createCell(graph[i], xLeft, xRight, yUp, yDown));
             xLeft += 10;
             xRight += 10;
 
         }
-        return svg;
+        return svgb;
     }
 
-    private String createCell(Cell cell, int x1, int x2, int y1, int y2) {
-        String svg = "";
+    private StringBuffer createCell(Cell cell, int x1, int x2, int y1, int y2) {
+        StringBuffer svgb = new StringBuffer();
         if (cell.isNorth())
-            svg += String.format(northWall, x1, y1, x2, y1);
-        if (cell.isSouth())
-            svg += String.format(southWall, x1, y2, x2, y2);
-        if (cell.isEast())
-            svg += String.format(eastWall, x2, y1, x2, y2);
-        if (cell.isWest())
-            svg += String.format(westWall, x1, y1, x1, y2);
 
-        return svg;
+            svgb.append(String.format(northWall, x1, y1, x2, y1));
+        if (cell.isSouth())
+
+            svgb.append(String.format(southWall, x1, y2, x2, y2));
+        if (cell.isEast())
+
+            svgb.append(String.format(eastWall, x2, y1, x2, y2));
+        if (cell.isWest())
+
+            svgb.append(String.format(westWall, x1, y1, x1, y2));
+
+        return svgb;
 
     }
 
-    public String createPath(Lista<VerticeGrafica<Cell>> path) {
-        String svgPath = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='yellowgreen' stroke-width='1' />\n";
+    public StringBuffer createPath(Lista<VerticeGrafica<Cell>> path) {
+        String svgPath = "<line x1='%1$d' y1='%2$d' x2='%3$d' y2='%4$d' stroke='deeppink' stroke-width='1' />\n";
         String circle = "<circle cx='%1$d' cy='%2$d' r='2' fill='%3$s' />\n";
-        String svg = "";
+        StringBuffer svgb = new StringBuffer();
+
         Cell[] arrPath = new Cell[path.getLongitud()];
         int i = 0;
         for (VerticeGrafica<Cell> cell : path) {
@@ -76,16 +80,17 @@ public class RoomsSvg {
             int x2 = arrPath[j + 1].getX();
             int y1 = arrPath[j].getY();
             int y2 = arrPath[j + 1].getY();
-            svg += String.format(svgPath, x1, y1, x2, y2);
+            svgb.append(String.format(svgPath, x1, y1, x2, y2));
+
         }
 
         int entryX = arrPath[0].getX();
         int entryY = arrPath[0].getY();
         int exitX = arrPath[arrPath.length - 1].getX();
         int exitY = arrPath[arrPath.length - 1].getY();
-        svg += String.format(circle, entryX, entryY, "MediumPurple");
-        svg += String.format(circle, exitX, exitY, "Lightseagreen");
-        return svg;
+        svgb.append(String.format(circle, entryX, entryY, "MediumPurple"));
+        svgb.append(String.format(circle, exitX, exitY, "Lightseagreen"));
+        return svgb;
     }
 
 }
