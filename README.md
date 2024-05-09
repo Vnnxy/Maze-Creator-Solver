@@ -1,32 +1,32 @@
-# Proyecto 3 - Estructuras de Datos
+# Maze Builder/Solver
 
 ## Descripción
-Este proyecto es parte de la asignatura de Estructuras de Datos impartida por el profesor Canek Peláez Valdés en la Facultad de Ciencias de la UNAM, durante el semestre 2023-2. La aplicación genera laberintos a partir de una semilla dada y regresa su representación en formato SVG. Además, brinda la opción de resolver los laberintos y mostrar gráficamente su solución.
+This project was part of the Data Structures course by Canek Peláez Valdés
+We use graphs and other data structures to create a maze. EVery maze is different and it is built by a given seed, meaning that if a specific seed is used, the same maze will be created. Aditionally, a solution with the lowest cost made by using the Dijkstra algorrithm will be given. All of this is presented as an svg.
 
-## Uso
+## To start the application
 
-### Generar un laberinto:
+### Generating a maze:
 ```bash
-$ java -jar target/proyecto3.jar -g -s 1234 -w 100 -h 100 > ejemplo.mze
+$ java -jar target/proyecto3.jar -g -s 1234 -w 100 -h 100 > test.mze
 ```
-En donde:
-+ -g indica que vamos a generar un laberinto
-+ -s seguido de un número es opcional, este nos indica la semilla que utilizaremos.
-+ -w seguido de un número nos indica el número de columnas del laberinto. (Max 255)
-+ -h seguido de un número nos indica el número de renglones del laberinto. (Max 255)
-+ \> ejemplo.mze Crea el archivo con nombre ejemplo.mze
+Where:
++ -g indicates that we are generating a maze.
++ -s followed by a number is optional. It indicates the seed we will be using.
++ -w Followed by a number will indicate the number of columns of our maze (Max 255)
++ -h Followed by a number will indicate the number of rows of our maze (Max 255)
++ \> test.mze Will create the file with the name "test.mze"
 
-### Resolver el laberinto:
+### Solving the maze:
 ```bash
-$ java -jar target/proyecto3.jar < ejemplo.mze > solucion.svg
+$ java -jar target/proyecto3.jar < test.mze > solution.svg
 ```
-### o equivalentemente:
+### or:
 ```bash
-$ cat ejemplo.mze | java -jar target/proyecto3.jar > solucion.svg
+$ cat test.mze | java -jar target/proyecto3.jar > solution.svg
 ```
-## Notas:
-- Los laberintos tienen terminación .mze
-- Se procesa la entrada en tiempo O(nlogn)
-- Se utilizan las estructuras de datos implementadas durante todo el curso.
-- La solución solo sirve en laberinto con mismo número de columnas y renglones.
-- Hay puntajes en cada habitación, por lo que el programa buscará la solución que menos puntos requiera.
+## Additional notes:
+- All mazes have the .mze extension.
+- The input is computed in O(nlogn).
+- To make a solution it is required that columns and rows are equal.
+- Each room of the maze contains points which cost the player. Therefore, the given solution will be the one with the lowest score.
