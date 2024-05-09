@@ -1,6 +1,6 @@
 # Maze Builder/Solver
 
-## Descripción
+## Description
 This project was part of the Data Structures course by Canek Peláez Valdés
 We use graphs and other data structures to create a maze. EVery maze is different and it is built by a given seed, meaning that if a specific seed is used, the same maze will be created. Aditionally, a solution with the lowest cost made by using the Dijkstra algorrithm will be given. All of this is presented as an svg.
 
