@@ -5,7 +5,8 @@
 This project was part of the Data Structures course by Canek Peláez Valdés
 We use graphs and other data structures to create a maze. Every maze is different and it is built by a given seed, meaning that if a specific seed is used, the same maze will be created. Aditionally, a solution with the lowest cost made by using the Dijkstra algorrithm will be given. All of this is presented as an svg.
 
-## Demo:
+## Demo of a 40 x 40 Maze:
+![Maze40x40](/solution.svg)
 
 ## To start the application
 
@@ -35,7 +36,7 @@ Where:
 - -s followed by a number is optional. It indicates the seed we will be using.
 - -w Followed by a number will indicate the number of columns of our maze (Max 255)
 - -h Followed by a number will indicate the number of rows of our maze (Max 255)
-- \> test.mze Will create the file with the name "test.mze"
+- \> test.mze will create the file with the name "test.mze"
 
 ### Solving the maze:
 
